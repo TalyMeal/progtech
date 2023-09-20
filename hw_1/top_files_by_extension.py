@@ -5,54 +5,50 @@ import time
 
 # для удобства работы в консоли - минимальная справка
 # единственный арумент - путь, с которого начинается сканирование
-parser = argparse.ArgumentParser(description="Скрипт для получения топа файлов по размеру",
+parser = argparse.ArgumentParser(description="Скрипт для получения топа расширений по числу файлов",
                                  formatter_class=argparse.ArgumentDefaultsHelpFormatter)
-parser.add_argument('--path', 
+parser.add_argument('--path',
+                    '-p',
                     type=str, 
                     default='/', 
                     help="Путь для старта. Пример: /home/{USERNAME}/Downloads/")
-parser.add_argument('--top', 
+parser.add_argument('--top',
+                    '-t', 
                     type=int, 
                     default=10, 
                     help="Количество файлов для вывода. Пример: 3")
 args = parser.parse_args()
 
-# В функции создаем словарь с числом элементов N = топ файлов по размеру
-# В словаре ключ - абсолютный путь до файла, значение - размер файла в байтах
-# Словарь инициализирован со значениями, равными 0
-# Рекурсивно ходим по директориям и в каждой проверяем наличие файлов, чей размер больше, чем 
-# в нашем словаре. Выводим результат
-def top_files_by_size(path_from: str, top: int) -> dict:
+def count_ext(path_from: str, top: int) -> dict:
 
-    top_files = {f'file_{k}':k for k in range(top)}
+    extensions = dict()
 
     for root, dirs, files in os.walk(path_from):
-        dict_update(root, files, top_files)
+        dict_update(files, extensions)
 
-    print_results(top_files)
+    print_results(extensions)
 
-# Проверяем, есть ли внутри директории файлы размером больше, чем в нашем словаре
-# Если такие файлы находятся - заменяем ими файлы меньшего размера из словаря
-def dict_update(root, files, top_files):
+def dict_update(files, extensions):
 
     for file in files:
-        full_path = join(root, file)
-        val_with_min_key = min(top_files, key=top_files.get)
+        extension = file.split('.')[-1]
 
-        if top_files[val_with_min_key] < getsize(full_path):
-            del top_files[val_with_min_key]
-            top_files[full_path] = getsize(full_path)
+        if extension in extensions.keys():
+            extensions[extension] += 1
+        else:
+            extensions[extension] = 1          
 
-    return top_files
+    return extensions
 
 # Красиво выводим результат
-def print_results(top_files: dict) -> print:
-    padding = max([len(_.split('/')[-1]) for _ in top_files.keys()])
-    top_files = dict(sorted(top_files.items(), key=lambda x:x[1], reverse=True))
+def print_results(extensions: dict) -> print:
+    padding = 10
+    extensions = dict(sorted(extensions.items(), key=lambda x:x[1], reverse=True))
     print()
-    print(f"{f'Топ {len(top_files)} файлов по размеру в директории {args.path}' : ^{padding}}", end='\n\n')
-    for i, (k, v) in enumerate(top_files.items(), 1):
-        print(f'{str(i).rjust(len(str(args.top)))}. {k.split("/")[-1] : >{padding}} : {v} bytes')
+    print(f"{f'Топ {args.top} расширений по числу файлов в директории {args.path}' : ^{padding}}", end='\n\n')
+    for i, (k, v) in enumerate(extensions.items(), 1):
+        if i <= args.top:
+            print(f'{str(i).rjust(len(str(args.top)))}. {k.split("/")[-1] : >10} : {v} files')
     print()
 
 # Изменяет время работы программы
@@ -62,6 +58,6 @@ def prog_exe_time(func: callable, *args: tuple[str, int]) -> float:
     end = time.time()
     return round(end-start, 2)
 
-result_time = prog_exe_time(top_files_by_size, args.path, args.top)
+result_time = prog_exe_time(count_ext, args.path, args.top)
 
 print(f"Время выполнения программы : {result_time} сек.")
