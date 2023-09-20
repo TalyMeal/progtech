@@ -1,5 +1,6 @@
+# ВНИМАНИЕ - по умолчанию без переданного аргумента скрипт начинает обход с /
+
 import os
-from os.path import join, getsize
 import argparse
 import time
 

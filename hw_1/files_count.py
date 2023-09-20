@@ -17,6 +17,7 @@ parser.add_argument('--path',
                     help="Путь для старта. Пример: /home/{USERNAME}/Downloads/")
 args = parser.parse_args()
 
+# считается число файлов
 def f_count(path_from: str) -> int:
 
     cnt = 0
