@@ -1,4 +1,4 @@
-# ВНИМАНИЕ - по умолчанию без переданного аргумента скрипт начинает обход с /
+# ВНИМАНИЕ - по умолчанию без переданного аргумента скрипт начинает обход с /home/
 
 import os
 import argparse
@@ -11,7 +11,7 @@ parser = argparse.ArgumentParser(description="Скрипт для получен
 parser.add_argument('--path',
                     '-p',
                     type=str, 
-                    default='/', 
+                    default='/home/', 
                     help="Путь для старта. Пример: /home/{USERNAME}/Downloads/")
 parser.add_argument('--top',
                     '-t', 
