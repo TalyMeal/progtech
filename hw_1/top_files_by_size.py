@@ -34,14 +34,13 @@ parser.add_argument('--top',
                     default=10, 
                     help="Количество файлов для вывода. Пример: 3")
 args = parser.parse_args()
-config = vars(args)
 
-# В функции создаем словарь с числом элементов N = топ файлов по размеру
+# В функции создается словарь с числом элементов N = топ файлов по размеру
 # В словаре ключ - абсолютный путь до файла, значение - размер файла в байтах
-# Словарь инициализирован со значениями, равными 0
-# Рекурсивно ходим по директориям и в каждой проверяем наличие файлов, чей размер больше, чем 
-# в нашем словаре. Выводим результат
-def top_files_by_size(path_from: str, top: int) -> dict:
+# Словарь инициализируется со значениями, равными 0
+# Функция обходит директории и в каждой вызывает dict_update, в конце
+# возвращает обновленный словарь.
+def top_by_size(path_from: str, top: int) -> dict:
 
     top_files = {f'file_{k}':k for k in range(top)}
 
@@ -50,9 +49,9 @@ def top_files_by_size(path_from: str, top: int) -> dict:
 
     print_results(top_files)
 
-# Проверяем, есть ли внутри директории файлы размером больше, чем в нашем словаре
-# Если такие файлы находятся - заменяем ими файлы меньшего размера из словаря
-def dict_update(root, files, top_files):
+# Функция проверяет, есть ли внутри директории файлы размером больше, чем в словаре
+# Если такие файлы находятся - заменяет ими файлы меньшего размера из словаря
+def dict_update(root: str, files: list, top_files: dict) -> dict:
 
     for file in files:
         full_path = join(root, file)
@@ -64,7 +63,7 @@ def dict_update(root, files, top_files):
 
     return top_files
 
-# Красиво выводим результат
+# Красиво выводится результат
 def print_results(top_files: dict) -> print:
     padding = max([len(_.split('/')[-1]) for _ in top_files.keys()])
     top_files = dict(sorted(top_files.items(), key=lambda x:x[1], reverse=True))
@@ -74,13 +73,13 @@ def print_results(top_files: dict) -> print:
         print(f'{str(i).rjust(len(str(args.top)))}. {k.split("/")[-1] : >{padding}} : {v} bytes')
     print()
 
-# Изменяет время работы программы
+# Измеряется время работы программы
 def prog_exe_time(func: callable, *args: tuple[str, int]) -> float:
     start = time.time()
     func(*args)
     end = time.time()
     return round(end-start, 2)
 
-result_time = prog_exe_time(top_files_by_size, args.path, args.top)
+result_time = prog_exe_time(top_by_size, args.path, args.top)
 
 print(f"Время выполнения программы : {result_time} сек.")

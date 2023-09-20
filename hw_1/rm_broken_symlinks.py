@@ -5,7 +5,7 @@
 # В каждой директории получает список битых символических ссылок и удаляет их
 
 import os
-from os.path import join
+from os.path import join, isdir, islink
 import argparse
 import time
 
@@ -20,24 +20,26 @@ parser.add_argument('--path',
                     help="Путь для старта. Пример: /home/{USERNAME}/Downloads/")
 args = parser.parse_args()
 
-# Заглядывает в директорию и удаляет битые символические ссылки,
-# затем вызывает rm_broken_symlinks
-def rm_broken_symlinks_dir(path_from: str, path: str) -> None:
-    full_path = join(path_from, path)
-    os.system(f'sudo find "{full_path}" -xtype l -delete')
-    rm_broken_symlinks(full_path)
-
 # Проверяет содержимое директории и для каждой из вложенных директорий
 # вызывает rm_broken_symlinks_dir
+# not islink(path) защищает от прохода по бесконечному кольцу ссылок на папки
 def rm_broken_symlinks(path_from: str) -> None:
 
     for path in os.scandir(path_from):
-        if path.is_dir():
+        if isdir(path) and not islink(path):
             rm_broken_symlinks_dir(path_from, path)
         else:
             continue
 
-# Изменяет время работы программы
+# Удаляет битые символические ссылки в директории,
+# затем вызывает rm_broken_symlinks
+def rm_broken_symlinks_dir(path_from: str, path: str) -> None:
+
+    full_path = join(path_from, path)
+    os.system(f'sudo find "{full_path}" -xtype l -delete')
+    rm_broken_symlinks(full_path)
+
+# Измеряет время работы программы
 def prog_exe_time(func: callable, *args) -> float:
     start = time.time()
     func(*args)

@@ -19,6 +19,9 @@ parser.add_argument('--top',
                     help="Количество файлов для вывода. Пример: 3")
 args = parser.parse_args()
 
+# Функция обходит все директории, начиная от указанной, и в каждой
+# с помощью dict_update подсчитывает и сохраняет количество расширений в словарь.
+# При завершении возвращает полученный словарь
 def count_ext(path_from: str, top: int) -> dict:
 
     extensions = dict()
@@ -28,15 +31,22 @@ def count_ext(path_from: str, top: int) -> dict:
 
     print_results(extensions)
 
-def dict_update(files, extensions):
+# Получает словарь с именами расширениями и их числом и список файлов директории
+# Для каждого файла пробует получить расширение через точку и добавить его в словарь или
+# увеличить число найденных файлов с данным расширением.
+# При завершении возвращает обновленный словарь
+def dict_update(files: list, extensions: dict) -> dict:
 
     for file in files:
-        extension = file.split('.')[-1]
+        try:
+            extension = file.split('.')[-1]
 
-        if extension in extensions.keys():
-            extensions[extension] += 1
-        else:
-            extensions[extension] = 1          
+            if extension in extensions.keys():
+                extensions[extension] += 1
+            else:
+                extensions[extension] = 1     
+        except:
+            continue     
 
     return extensions
 
@@ -51,7 +61,7 @@ def print_results(extensions: dict) -> print:
             print(f'{str(i).rjust(len(str(args.top)))}. {k.split("/")[-1] : >10} : {v} files')
     print()
 
-# Изменяет время работы программы
+# Измеряет время работы программы
 def prog_exe_time(func: callable, *args: tuple[str, int]) -> float:
     start = time.time()
     func(*args)
