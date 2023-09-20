@@ -38,7 +38,7 @@ def rm_broken_symlinks(path_from: str) -> None:
             continue
 
 # Изменяет время работы программы
-def prog_exe_time(func: callable, *args: any) -> float:
+def prog_exe_time(func: callable, *args) -> float:
     start = time.time()
     func(*args)
     end = time.time()
