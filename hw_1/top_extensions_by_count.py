@@ -74,4 +74,4 @@ def print_results(extensions: dict) -> print:
 
 result_time = prog_exe_time(count_ext, args.path, args.top)
 
-print(f"Время выполнения программы : {result_time} сек.")
+print(f"Время выполнения программы : {result_time[0]} сек.")
