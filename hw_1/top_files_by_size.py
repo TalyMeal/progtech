@@ -85,13 +85,13 @@ def print_results(top_files: dict) -> print:
         print(f'{str(i).rjust(len(str(args.top)))}. {k.split("/")[-1] : >{padding}} : {v} bytes')
     print()
 
-# Измеряется время работы программы
-def prog_exe_time(func: callable, *args: tuple[str, int]) -> float:
+# Возвращается время работы программы и результат функции
+def prog_exe_time(func: callable, *args: tuple[str, int]) -> (float, any):
     start = time.time()
-    func(*args)
+    result = func(*args)
     end = time.time()
-    return round(end-start, 2)
+    return round(end-start, 2), result
 
-result_time = prog_exe_time(top_by_size, args.path, args.top)
-
-print(f"Время выполнения программы : {result_time} сек.")
+if __name__=='__main__':
+    result_time = prog_exe_time(top_by_size, args.path, args.top)[0]
+    print(f"Время выполнения программы : {result_time} сек.")

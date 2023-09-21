@@ -1,8 +1,7 @@
 # ВНИМАНИЕ - по умолчанию без переданного аргумента скрипт начинает обход с /
 
 import os
-from os.path import join, getsize
-import time
+from top_files_by_size import prog_exe_time
 import argparse
 
 # для удобства работы в консоли - минимальная справка
@@ -26,13 +25,6 @@ def f_count(path_from: str) -> int:
         cnt += len(files)
 
     return cnt
-
-# Измеряется время работы программы
-def prog_exe_time(func: callable, *args: str) -> float:
-    start = time.time()
-    cnt = func(*args)
-    end = time.time()
-    return round(end-start, 2), cnt
 
 result_time, cnt = prog_exe_time(f_count, args.path)
 

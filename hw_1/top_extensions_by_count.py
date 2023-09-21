@@ -3,7 +3,7 @@
 import os
 from os.path import join, islink
 import argparse
-import time
+from top_files_by_size import prog_exe_time
 
 # для удобства работы в консоли - минимальная справка
 # единственный арумент - путь, с которого начинается сканирование
@@ -72,14 +72,6 @@ def print_results(extensions: dict) -> print:
             print(f'{str(i).rjust(len(str(args.top)))}. {k.split("/")[-1] : >10} : {v} files')
     print()
 
-# Измеряет время работы программы
-def prog_exe_time(func: callable, *args: tuple[str, int]) -> float:
-    start = time.time()
-    func(*args)
-    end = time.time()
-    return round(end-start, 2)
-
-# использовать if __name__=='__main__'... чтобы вызывать функцию только из этого файла
 result_time = prog_exe_time(count_ext, args.path, args.top)
 
 print(f"Время выполнения программы : {result_time} сек.")
