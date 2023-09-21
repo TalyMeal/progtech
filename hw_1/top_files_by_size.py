@@ -93,5 +93,5 @@ def prog_exe_time(func: callable, *args: tuple[str, int]) -> (float, any):
     return round(end-start, 2), result
 
 if __name__=='__main__':
-    result_time = prog_exe_time(top_by_size, args.path, args.top)[0]
-    print(f"Время выполнения программы : {result_time} сек.")
+    result = prog_exe_time(top_by_size, args.path, args.top)
+    print(f"Время выполнения программы : {result[0]} сек.")

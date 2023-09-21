@@ -72,6 +72,6 @@ def print_results(extensions: dict) -> print:
             print(f'{str(i).rjust(len(str(args.top)))}. {k.split("/")[-1] : >10} : {v} files')
     print()
 
-result_time = prog_exe_time(count_ext, args.path, args.top)
+result = prog_exe_time(count_ext, args.path, args.top)
 
-print(f"Время выполнения программы : {result_time[0]} сек.")
+print(f"Время выполнения программы : {result[0]} сек.")
