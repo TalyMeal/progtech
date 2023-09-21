@@ -79,6 +79,7 @@ def prog_exe_time(func: callable, *args: tuple[str, int]) -> float:
     end = time.time()
     return round(end-start, 2)
 
+# использовать if __name__=='__main__'... чтобы вызывать функцию только из этого файла
 result_time = prog_exe_time(count_ext, args.path, args.top)
 
 print(f"Время выполнения программы : {result_time} сек.")
