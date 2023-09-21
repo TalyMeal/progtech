@@ -1,6 +1,7 @@
-# ВНИМАНИЕ - по умолчанию без переданного аргумента скрипт начинает обход с /home/
+# ВНИМАНИЕ - по умолчанию без переданного аргумента скрипт начинает обход с /
 
 import os
+from os.path import join, islink
 import argparse
 import time
 
@@ -11,7 +12,7 @@ parser = argparse.ArgumentParser(description="Скрипт для получен
 parser.add_argument('--path',
                     '-p',
                     type=str, 
-                    default='/home/', 
+                    default='/', 
                     help="Путь для старта. Пример: /home/{USERNAME}/Downloads/")
 parser.add_argument('--top',
                     '-t', 
@@ -28,19 +29,28 @@ def count_ext(path_from: str, top: int) -> dict:
     extensions = dict()
 
     for root, dirs, files in os.walk(path_from):
-        dict_update(files, extensions)
+        dict_update(root, files, extensions)
 
     print_results(extensions)
+
+# Отбор путей, не являющихся символическими ссылками
+def symlink_filter(root: str, files: list) -> list:
+
+    full_paths = list(filter(lambda x: not islink(x), [join(root, file) for file in files]))
+
+    return full_paths
 
 # Получает словарь с именами расширениями и их числом и список файлов директории
 # Для каждого файла пробует получить расширение через точку и добавить его в словарь или
 # увеличить число найденных файлов с данным расширением.
 # При завершении возвращает обновленный словарь
-def dict_update(files: list, extensions: dict) -> dict:
+def dict_update(root: str, files: list, extensions: dict) -> dict:
 
-    for file in files:
+    paths = symlink_filter(root, files)
+
+    for path in paths:
         try:
-            extension = file.split('.')[-1]
+            extension = path.split('.')[-1]
 
             if extension in extensions.keys():
                 extensions[extension] += 1

@@ -13,7 +13,7 @@
 # очень много файлов в системе маленькие, и хранить их смысла не имеет. 
 
 import os
-from os.path import join, getsize
+from os.path import join, getsize, islink
 import time
 import argparse
 
@@ -49,17 +49,29 @@ def top_by_size(path_from: str, top: int) -> dict:
 
     print_results(top_files)
 
+# Отбор путей, не являющихся символическими ссылками
+def symlink_filter(root: str, files: list) -> list:
+
+    full_paths = list(filter(lambda x: not islink(x), [join(root, file) for file in files]))
+
+    return full_paths
+
 # Функция проверяет, есть ли внутри директории файлы размером больше, чем в словаре
 # Если такие файлы находятся - заменяет ими файлы меньшего размера из словаря
 def dict_update(root: str, files: list, top_files: dict) -> dict:
 
-    for file in files:
-        full_path = join(root, file)
-        val_with_min_key = min(top_files, key=top_files.get)
+    paths = symlink_filter(root, files)
 
-        if top_files[val_with_min_key] < getsize(full_path):
-            del top_files[val_with_min_key]
-            top_files[full_path] = getsize(full_path)
+    for path in paths:
+
+        try:
+            val_with_min_key = min(top_files, key=top_files.get)
+
+            if top_files[val_with_min_key] < getsize(path):
+                del top_files[val_with_min_key]
+                top_files[path] = getsize(path)
+        except:
+            continue
 
     return top_files
 
