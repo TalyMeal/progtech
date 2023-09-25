@@ -28,5 +28,5 @@ def f_count(path_from: str) -> int:
 
 result = prog_exe_time(f_count, args.path)
 
-print(f'Число файлов в {args.path} - {result[1]} штук')
+print(f'Число файлов в {args.path} - {result[1]} шт')
 print(f"Время выполнения программы : {result[0]} сек.")
