@@ -1,16 +1,13 @@
-# ВНИМАНИЕ - по умолчанию без переданного аргумента скрипт начинает обход с /
-
 import os
 from os.path import join, islink
 import argparse
 from top_files_by_size import prog_exe_time
 from collections import defaultdict
 
-# Функция обходит все директории, начиная от указанной, и в каждой
-# с помощью dict_update подсчитывает и сохраняет количество расширений в словарь.
-# При завершении возвращает полученный словарь
 def count_ext(path_from: str, top: int) -> dict:
-
+    """Функция обходит все директории, начиная от указанной, и в каждой
+    с помощью dict_update подсчитывает и сохраняет количество расширений в словарь.
+    При завершении возвращает полученный словарь"""
     extensions = defaultdict(int)
 
     for root, dirs, files in os.walk(path_from):
@@ -18,19 +15,17 @@ def count_ext(path_from: str, top: int) -> dict:
 
     print_results(extensions, path_from, top)
 
-# Отбор путей, не являющихся символическими ссылками
 def symlink_filter(root: str, files: list) -> list:
-
+    """Отбор путей, не являющихся символическими ссылками"""
     full_paths = list(filter(lambda x: not islink(x), [join(root, file) for file in files]))
 
     return full_paths
 
-# Получает словарь с именами расширениями и их числом и список файлов директории
-# Для каждого файла пробует получить расширение через точку и добавить его в словарь или
-# увеличить число найденных файлов с данным расширением.
-# При завершении возвращает обновленный словарь
 def dict_update(root: str, files: list, extensions: dict) -> dict:
-
+    """Получает словарь с именами расширениями и их числом и список файлов директории
+    Для каждого файла пробует получить расширение через точку и добавить его в словарь или
+    увеличить число найденных файлов с данным расширением.
+    При завершении возвращает обновленный словарь"""
     paths = symlink_filter(root, files)
 
     for path in paths:
@@ -42,8 +37,8 @@ def dict_update(root: str, files: list, extensions: dict) -> dict:
 
     return extensions
 
-# Красиво выводим результат
 def print_results(extensions: dict, path: str, top: int) -> print:
+    """Красиво выводим результат"""
     padding = 10
     extensions = dict(sorted(extensions.items(), key=lambda x:x[1], reverse=True))
     print()
