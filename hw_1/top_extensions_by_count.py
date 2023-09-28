@@ -4,13 +4,14 @@ import os
 from os.path import join, islink
 import argparse
 from top_files_by_size import prog_exe_time
+from collections import defaultdict
 
 # Функция обходит все директории, начиная от указанной, и в каждой
 # с помощью dict_update подсчитывает и сохраняет количество расширений в словарь.
 # При завершении возвращает полученный словарь
 def count_ext(path_from: str, top: int) -> dict:
 
-    extensions = dict()
+    extensions = defaultdict(int)
 
     for root, dirs, files in os.walk(path_from):
         dict_update(root, files, extensions)
@@ -35,11 +36,7 @@ def dict_update(root: str, files: list, extensions: dict) -> dict:
     for path in paths:
         try:
             extension = path.split('.')[-1]
-
-            if extension in extensions.keys():
-                extensions[extension] += 1
-            else:
-                extensions[extension] = 1     
+            extensions[extension] += 1  
         except:
             continue     
 
