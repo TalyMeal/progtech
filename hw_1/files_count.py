@@ -1,11 +1,15 @@
-# ВНИМАНИЕ - по умолчанию без переданного аргумента скрипт начинает обход с /
+"""
+Скрипт число файлов, содержащихся в директории.
+
+ВНИМАНИЕ - по умолчанию скрипт начинает обход с /
+"""
 
 import os
 from top_files_by_size import prog_exe_time
 import argparse
 
 def f_count(path_from: str) -> int:
-    """считается число файлов"""
+    """Считает число файлов"""
     cnt = 0
 
     for root, dirs, files in os.walk(path_from):
@@ -15,7 +19,7 @@ def f_count(path_from: str) -> int:
 
 if __name__ == '__main__':
 
-    parser = argparse.ArgumentParser(description="Скрипт для получения топа файлов по размеру",
+    parser = argparse.ArgumentParser(description="Скрипт для получения числа файлов в директории",
                                     formatter_class=argparse.ArgumentDefaultsHelpFormatter)
     parser.add_argument('--path', 
                         '-p',
