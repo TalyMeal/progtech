@@ -19,10 +19,10 @@ def top_by_size(path_from: str, top: int) -> dict:
 
     Функция обходит директории и в каждой вызывает dict_update, в конце
     возвращает обновленный словарь.
-    """    
+    """
     top_files = {f'file_{k}':k for k in range(top)}
 
-    for root, dirs, files in os.walk(path_from):
+    for root, _, files in os.walk(path_from):
         dict_update(root, files, top_files)
 
     print_results(top_files, path_from, top)
@@ -59,34 +59,35 @@ def print_results(top_files: dict, path: str, top: int) -> print:
     padding = max([len(_.split('/')[-1]) for _ in top_files.keys()])
     top_files = dict(sorted(top_files.items(), key=lambda x:x[1], reverse=True))
     print()
-    print(f"{f'Топ {len(top_files)} файлов по размеру в директории {path}' : ^{padding}}", end='\n\n')
+    print(f"{f'Топ {len(top_files)} файлов по размеру в директории {path}' : ^{padding}}",
+          end='\n\n')
     for i, (k, v) in enumerate(top_files.items(), 1):
         print(f'{str(i).rjust(len(str(top)))}. {k.split("/")[-1] : >{padding}} : {v} bytes')
     print()
 
-def prog_exe_time(func: callable, *args: tuple[str, int]) -> (float, any):
+def prog_exe_time(func: callable, *arguments: tuple[str, int]) -> (float, any):
     """Возвращается время работы программы и результат работы функции"""
     start = time.time()
-    result = func(*args)
+    func_result = func(*arguments)
     end = time.time()
-    return round(end-start, 2), result
+    return round(end-start, 2), func_result
 
 if __name__=='__main__':
 
     parser = argparse.ArgumentParser(description="Скрипт для получения топа файлов по размеру",
                                     formatter_class=argparse.ArgumentDefaultsHelpFormatter)
-    parser.add_argument('--path', 
+    parser.add_argument('--path',
                         '-p',
-                        type=str, 
-                        default='/', 
+                        type=str,
+                        default='/',
                         help="Путь для старта. Пример: /home/{USERNAME}/Downloads/")
     parser.add_argument('--top',
                         '-t', 
-                        type=int, 
-                        default=10, 
+                        type=int,
+                        default=10,
                         help="Количество файлов для вывода. Пример: 3")
     args = parser.parse_args()
 
     result = prog_exe_time(top_by_size, args.path, args.top)
-    
+
     print(f"Время выполнения программы : {result[0]} сек.")

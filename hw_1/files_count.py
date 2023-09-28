@@ -5,26 +5,28 @@
 """
 
 import os
-from top_files_by_size import prog_exe_time
 import argparse
+from top_files_by_size import prog_exe_time
+
 
 def f_count(path_from: str) -> int:
     """Считает число файлов"""
     cnt = 0
 
-    for root, dirs, files in os.walk(path_from):
+    for _, _, files in os.walk(path_from):
         cnt += len(files)
 
     return cnt
 
+
 if __name__ == '__main__':
 
     parser = argparse.ArgumentParser(description="Скрипт для получения числа файлов в директории",
-                                    formatter_class=argparse.ArgumentDefaultsHelpFormatter)
-    parser.add_argument('--path', 
+                                     formatter_class=argparse.ArgumentDefaultsHelpFormatter)
+    parser.add_argument('--path',
                         '-p',
-                        type=str, 
-                        default='/', 
+                        type=str,
+                        default='/',
                         help="Путь для старта. Пример: /home/{USERNAME}/Downloads/")
     args = parser.parse_args()
 
