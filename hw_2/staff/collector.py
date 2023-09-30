@@ -12,17 +12,19 @@ class Collector:
         self.path_from = path_from
         self._headers = ('Name', 'Full_path', 'Size_bytes',
                          'Create', 'Modifying')
-        self.full_paths = []
+        self._writer = callable
+        self._dict_string = {}
+        self._full_paths = []
         self._file = str()
         self._dirpath = str()
         self._filenames = str()
 
     def _symlink_filter(self):
         """Отбор путей, не являющихся символическими ссылками"""
-        self.full_paths = list(filter(lambda x: not islink(
+        self._full_paths = list(filter(lambda x: not islink(
             x), [join(self._dirpath, self._file) for self._file in self._filenames]))
 
-        return self.full_paths
+        return self._full_paths
 
     def _scan_dir(self):
 
@@ -39,11 +41,11 @@ class Collector:
     def collect(self):
         """Colllect data from directories and make CSV file"""
         for self._dirpath, _, self._filenames in os.walk(self.path_from):
-            with open('foo.csv', 'a') as self.f:
-                self.writer = csv.DictWriter(self.f, fieldnames=self._headers)
-                self.writer.writeheader()
-                for self.i in self._scan_dir():
-                    self.writer.writerow(self.i)
+            with open('index.csv', 'a', encoding='utf-8') as self._file:
+                self._writer = csv.DictWriter(self._file, fieldnames=self._headers)
+                self._writer.writeheader()
+                for self._dict_string in self._scan_dir():
+                    self._writer.writerow(self._dict_string)
 
 
 cl = Collector('/home/furyseer/Загрузки/')
