@@ -1,36 +1,30 @@
-"""
-Скрипт число файлов, содержащихся в директории.
+"""Скрипт считает число файлов, содержащихся в index.csv"""
 
-ВНИМАНИЕ - по умолчанию скрипт начинает обход с /
-"""
-
+import pandas as pd
+from datetime import datetime, date, timedelta
 import os
-import argparse
+from os.path import getctime
 from top_files_by_size import prog_exe_time
 
 
-def f_count(path_from: str) -> int:
+def f_count() -> int:
     """Считает число файлов"""
-    cnt = 0
 
-    for _, _, files in os.walk(path_from):
-        cnt += len(files)
+    index = pd.read_csv('../data/index.csv', usecols=['Name'], engine='pyarrow')
 
-    return cnt
+    return len(index.index)
 
 
 if __name__ == '__main__':
 
-    parser = argparse.ArgumentParser(description="Скрипт для получения числа файлов в директории",
-                                     formatter_class=argparse.ArgumentDefaultsHelpFormatter)
-    parser.add_argument('--path',
-                        '-p',
-                        type=str,
-                        default='/',
-                        help="Путь для старта. Пример: /home/{USERNAME}/Downloads/")
-    args = parser.parse_args()
+    if not os.path.exists('../data/index.csv'):
+        print('You need to create index.csv file')
+        
+    else:
+        if (datetime.fromtimestamp(getctime('../data/index.csv')).date() - date.today()) > timedelta(days=2):
+            print('Probably you need to update index.CSV file')
 
-    result = prog_exe_time(f_count, args.path)
-
-    print(f'Число файлов в {args.path} - {result[1]} шт')
-    print(f"Время выполнения программы : {result[0]} сек.")
+        result = prog_exe_time(f_count)
+        
+        print(f'Число файлов - {result[1]} шт')
+        print(f"Время выполнения программы : {result[0]} сек.")
