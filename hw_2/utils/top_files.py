@@ -56,9 +56,9 @@ if __name__ == '__main__':
             print(f'Collecting files from {args.path}, wait...')
             cl.collect()
             print('All files are collected! Now you could start to use top_files_by_size function')
-            
+
         else:
-            with open('../fun/ysnp.txt', 'r') as file:
+            with open('../fun/ysnp.txt', 'r', encoding='utf-8') as file:
                 for row in file:
                     print(row, end='')
             print('\n')

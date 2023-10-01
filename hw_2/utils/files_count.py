@@ -34,7 +34,7 @@ if __name__ == '__main__':
         print('You need to create index.csv file')
 
         if args.question is None:
-            args.question = input('Do you want make index.csv? [y, n] ')  
+            args.question = input('Do you want make index.csv? [y, n] ')
             print('\n')
 
         if args.question == 'y':

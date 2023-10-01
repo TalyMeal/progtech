@@ -28,7 +28,7 @@ def extensions_count(top):
 if __name__ == '__main__':
 
     parser = argparse.ArgumentParser()
-    parser.add_argument('--question', 
+    parser.add_argument('--question',
                         '-q',
                         type=str,
                         help="Вопрос - генерировать ли файл index.csv")
@@ -41,23 +41,22 @@ if __name__ == '__main__':
                         '-t', 
                         type=int,
                         default=10,
-                        help="Количество файлов для вывода. Пример: 3")        
+                        help="Количество файлов для вывода. Пример: 3")
     args = parser.parse_args()
 
     if not os.path.exists('../data/index.csv'):
         print('You need to create index.csv file')
 
         if args.question is None:
-            args.question = input('Do you want make index.csv? [y, n] ')  
-            print('\n')  
+            args.question = input('Do you want make index.csv? [y, n] ')
+            print('\n')
 
         if args.question == 'y':
             args.path = input('Which path do you want to start? ')
             cl = Collector(args.path)
             print(f'Collecting files from {args.path}, wait...')
             cl.collect()
-            print(f'All files are collected! Now you could start to use top_extensions function')
-            
+            print('All files are collected! Now you could start to use top_extensions function')
         else:
             with open('../fun/ysnp.txt', 'r', encoding='utf-8') as file:
                 for row in file:
