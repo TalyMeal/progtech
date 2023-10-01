@@ -6,11 +6,10 @@
 import os
 import sys
 import argparse
-import pandas as pd
-from collections import defaultdict
 from datetime import datetime, date, timedelta
+from os.path import getctime
+import pandas as pd
 from top_files import prog_exe_time
-from os.path import getctime, join, islink
 sys.path.insert(0,"..")
 from staff.collector import Collector
 
@@ -60,7 +59,7 @@ if __name__ == '__main__':
             print(f'All files are collected! Now you could start to use top_extensions function')
             
         else:
-            with open('../fun/ysnp.txt', 'r') as file:
+            with open('../fun/ysnp.txt', 'r', encoding='utf-8') as file:
                 for row in file:
                     print(row, end='')
             print('\n')
