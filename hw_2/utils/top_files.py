@@ -4,9 +4,9 @@ import os
 import sys
 import time
 import argparse
-import pandas as pd
 from datetime import datetime, date, timedelta
 from os.path import getctime
+import pandas as pd
 sys.path.insert(0,"..")
 from staff.collector import Collector
 
