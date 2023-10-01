@@ -3,6 +3,7 @@
 from datetime import datetime
 import csv
 import os
+import logging
 from os.path import join, getsize, islink, getmtime, getctime
 
 class Collector:
@@ -40,9 +41,10 @@ class Collector:
                        'Create': datetime.fromtimestamp(getctime(self._file[1])).date(),
                        'Modifying': datetime.fromtimestamp(getmtime(self._file[1])).date()
                        }
-            except:
+            except Exception:
+                logging.exception(f"Error get {self._file} data")
                 continue
-
+                
     def _write_dir_data(self):
         """Write files data in directory to CSV"""
         with open('../data/index.csv', 'a', encoding='utf-8') as self._file:
