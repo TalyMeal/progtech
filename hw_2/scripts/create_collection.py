@@ -7,7 +7,7 @@ from staff.collector import Collector
 
 if __name__ == '__main__':
 
-    parser = argparse.ArgumentParser(description="Скрипт для получения числа файлов в директории",
+    parser = argparse.ArgumentParser(description="Скрипт для получения таблицы всех файлов в директории",
                                      formatter_class=argparse.ArgumentDefaultsHelpFormatter)
     parser.add_argument('--path',
                         '-p',

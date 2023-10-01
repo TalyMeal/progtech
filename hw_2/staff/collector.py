@@ -52,12 +52,10 @@ class Collector:
                 self._writer.writerow(self._dict_string)
 
     def collect(self):
-        """Collect data from directories and make CSV file
-        Delete CSV is exist and create and write if not exist
         """
-        if os.path.exists('../data/index.csv'):
-            os.remove("../data/index.csv")
-
+        Collect data from directories and make CSV file
+        Сreate file if not exist
+        """
         if not os.path.exists('../data/index.csv'):
             with open('../data/index.csv', 'w', encoding='utf-8') as self._file:
                 self._writer = csv.DictWriter(self._file, fieldnames=self._headers)

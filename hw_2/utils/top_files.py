@@ -1,20 +1,28 @@
-"""Скрипт считает число файлов, содержащихся в index.csv"""
+"""Скрипт возвращает N самых больших по размеру файлов"""
 
 import os
 import sys
+import time
 import argparse
 import pandas as pd
 from datetime import datetime, date, timedelta
 from os.path import getctime
-from top_files import prog_exe_time
 sys.path.insert(0,"..")
 from staff.collector import Collector
 
-def f_count() -> int:
-    """Считает число файлов"""
-    index = pd.read_csv('../data/index.csv', usecols=['Name'], engine='pyarrow')
+def top_by_size(top):
+    """Get top 10 files"""
+    index = pd.read_csv('../data/index.csv', usecols=['Name', 'Size_bytes'], engine='pyarrow')
+    index = index.sort_values(by=['Size_bytes'], ascending=False).head(top).set_index(pd.Index(range(1,top+1)))
 
-    return len(index.index)
+    return index
+
+def prog_exe_time(func, *arguments):
+    """Возвращается время работы программы и результат работы функции"""
+    start = time.time()
+    func_result = func(*arguments)
+    end = time.time()
+    return round(end-start, 2), func_result
 
 if __name__ == '__main__':
 
@@ -28,7 +36,12 @@ if __name__ == '__main__':
                         type=str,
                         default='/',
                         help="Путь для старта. Пример: /home/{USERNAME}/Downloads/")
-    args = parser.parse_args()  
+    parser.add_argument('--top',
+                        '-t', 
+                        type=int,
+                        default=10,
+                        help="Количество файлов для вывода. Пример: 3")        
+    args = parser.parse_args()
 
     if not os.path.exists('../data/index.csv'):
         print('You need to create index.csv file')
@@ -42,8 +55,8 @@ if __name__ == '__main__':
             cl = Collector(args.path)
             print(f'Collecting files from {args.path}, wait...')
             cl.collect()
-            print('All files are collected! Now you could start to use files_count function')
-
+            print('All files are collected! Now you could start to use top_files_by_size function')
+            
         else:
             with open('../fun/ysnp.txt', 'r') as file:
                 for row in file:
@@ -54,7 +67,8 @@ if __name__ == '__main__':
         if (datetime.fromtimestamp(getctime('../data/index.csv')).date() - date.today()) > timedelta(days=2):
             print('Probably you need to update index.csv file')
 
-        result = prog_exe_time(f_count)
-        
-        print(f'Число файлов - {result[1]} шт')
+        result = prog_exe_time(top_by_size, args.top)
+
+        print(f"Top {args.top} files by size:")
+        print(result[1], end='\n\n')
         print(f"Время выполнения программы : {result[0]} сек.")
