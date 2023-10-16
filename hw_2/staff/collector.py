@@ -8,8 +8,9 @@ from os.path import join, getsize, islink, getmtime, getctime
 
 class Collector:
     """Make CSV with some data about all files in directory"""
-    def __init__(self, path_from='/'):
+    def __init__(self, path_from='/', index_path='../data/index.csv'):
         self.path_from = path_from
+        self.index_path = index_path
         self._headers = ('Name', 'Full_path', 'Size_bytes',
                          'Create', 'Modifying')
         self._writer = callable
@@ -47,21 +48,21 @@ class Collector:
                 
     def _write_dir_data(self):
         """Write files data in directory to CSV"""
-        with open('../data/index.csv', 'a', encoding='utf-8') as self._file:
+        with open(self.index_path, 'a', encoding='utf-8') as self._file:
             self._writer = csv.DictWriter(self._file, fieldnames=self._headers)
 
-            for self._dict_string in self._scan_dir_generator():
-                self._writer.writerow(self._dict_string)
+            for self._dirpath, _, self._filenames in os.walk(self.path_from):
+                for self._dict_string in self._scan_dir_generator():
+                    self._writer.writerow(self._dict_string)
 
     def collect(self):
         """
         Collect data from directories and make CSV file
         Сreate file if not exist
         """
-        if not os.path.exists('../data/index.csv'):
-            with open('../data/index.csv', 'w', encoding='utf-8') as self._file:
+        if not os.path.exists(self.index_path):
+            with open(self.index_path, 'w', encoding='utf-8') as self._file:
                 self._writer = csv.DictWriter(self._file, fieldnames=self._headers)
-                self._writer.writeheader()        
+                self._writer.writeheader()
 
-        for self._dirpath, _, self._filenames in os.walk(self.path_from):                   
-            self._write_dir_data()
+        self._write_dir_data()
