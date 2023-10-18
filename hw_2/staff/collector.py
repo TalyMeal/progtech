@@ -1,18 +1,29 @@
 """Make CSV with some data about all files in directory"""
 
-from datetime import datetime
+# from datetime import datetime
 import csv
+import sys
 import os
 import logging
-from os.path import join, getsize, islink, getmtime, getctime
+from os.path import join, islink
+sys.path.insert(0,"..")
+from filesmeta.gru import Gru
+
+# как-то некрасиво - объявляя класс, подтягивать к нему другой, выполняющий какую-то работу.
+# Лучше это все делать в create_collection.py, пока не нашел способ
+
+# создали экземпляр Грю
+gru = Gru()
+
+# подтянули всех миньонов
+gru.get_extensions()
 
 class Collector:
     """Make CSV with some data about all files in directory"""
     def __init__(self, path_from='/', index_path='../data/index.csv'):
         self.path_from = path_from
         self.index_path = index_path
-        self._headers = ('Name', 'Full_path', 'Size_bytes',
-                         'Create', 'Modifying')
+        self._headers = gru.clmns # список названий столбцов, который собирается при вызове get_extensions
         self._writer = callable
         self._dict_string = {}
         self._all_files_and_full_paths = []
@@ -21,31 +32,29 @@ class Collector:
         self._dirpath = str()
         self._filenames = str()
 
+
     def _symlink_filter(self):
         """Get paths in directory excluding symbolic links"""
-        self._all_files_and_full_paths = [
-            (self._file, join(self._dirpath, self._file)) for self._file in self._filenames]
-        self._filter_files_and_full_paths = tuple(
-            filter(lambda x: not islink(x[1]), self._all_files_and_full_paths))
 
-        return self._filter_files_and_full_paths
+        self._all_files_and_full_paths = [join(self._dirpath, self._file) for self._file in self._filenames]
+
+        return tuple(filter(lambda x: not islink(x), self._all_files_and_full_paths))
+
 
     def _scan_dir_generator(self):
         """Make a generator with paths inside the directory excluding symbolic links"""
+
         self._filenames = self._symlink_filter()
 
         for self._file in self._filenames:
             try:
-                yield {'Name': self._file[0],
-                       'Full_path': self._file[1],
-                       'Size_bytes': getsize(self._file[1]),
-                       'Create': datetime.fromtimestamp(getctime(self._file[1])).date(),
-                       'Modifying': datetime.fromtimestamp(getmtime(self._file[1])).date()
-                       }
+                yield gru.gru_get_meta_inf(self._file)
+                
             except Exception:
                 logging.exception(f"Error get {self._file} data")
                 continue
-                
+
+
     def _write_dir_data(self):
         """Write files data in directory to CSV"""
         with open(self.index_path, 'a', encoding='utf-8') as self._file:
@@ -54,6 +63,7 @@ class Collector:
             for self._dirpath, _, self._filenames in os.walk(self.path_from):
                 for self._dict_string in self._scan_dir_generator():
                     self._writer.writerow(self._dict_string)
+
 
     def collect(self):
         """

@@ -2,6 +2,7 @@
 __pycache__/
 *.py[cod]
 *$py.class
+for_some_code_tests.ipynb
 
 # C extensions
 *.so

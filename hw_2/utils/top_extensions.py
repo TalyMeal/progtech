@@ -11,7 +11,7 @@ def extensions_count(args_index, top):
     """Get top 10 extensions"""
     index = pd.read_csv(args_index, usecols=['Name'], engine='pyarrow')
 
-    extensions = index["Name"].str.split(".", n = 1, expand = True).iloc[:,1:]
+    extensions = index["Name"].str.split(".", n = -1, expand = False).str[-1]
 
     extensions = extensions.value_counts()
     extensions = extensions.to_frame().reset_index().head(top).set_index(pd.Index(range(1,top+1)))

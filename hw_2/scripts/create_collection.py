@@ -29,7 +29,7 @@ if __name__ == '__main__':
                         default='../data/index.csv',
                         help="Абсолютный путь для индекса файлов. Пример: /home/{USERNAME}/Documents/index.csv По умолчанию - ../data/index.csv")    
     args = parser.parse_args()
-
+    
     cl = Collector(args.path, args.index)
 
     cl.collect()
