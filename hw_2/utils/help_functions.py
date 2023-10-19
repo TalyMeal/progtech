@@ -7,7 +7,13 @@ from datetime import datetime, date, timedelta
 from os.path import getctime
 sys.path.insert(0,"..")
 from staff.collector import Collector
+from filesmeta.gru import Gru
 
+# # создали экземпляр Грю
+gru = Gru()
+
+# # подтянули всех миньонов
+gru.get_extensions()
 
 def prog_exe_time(func, *arguments):
     """Возвращается время работы программы и результат работы функции"""
@@ -19,7 +25,7 @@ def prog_exe_time(func, *arguments):
 
 def check_and_run(args_index, args_question, args_path, func, arguments):
     '''Проверяет существование индекса по пути и запускает утилиту''' 
-    
+
     if not os.path.exists(args_index):
 
         print('You need to create index file or set index file path')
@@ -29,7 +35,7 @@ def check_and_run(args_index, args_question, args_path, func, arguments):
             arguments[0] = args_index = input('Which path do you want to set for index file? (default - ../data/index.csv) ') or '../data/index.csv'
             print('\n')
 
-        if not os.path.exists(args_index):    
+        if not os.path.exists(args_index):
             print('You need to create index file')
 
             if args_question is None:
@@ -38,7 +44,7 @@ def check_and_run(args_index, args_question, args_path, func, arguments):
 
             if args_question == 'y':
                 args_path = input('Which path do you want to start? ')
-                cl = Collector(args_path, args_index)
+                cl = Collector(gru, args_path, args_index)
                 print(f'Collecting files from {args_path}, wait...')
                 cl.collect()
                 print('All files are collected! Now you could start to use function')

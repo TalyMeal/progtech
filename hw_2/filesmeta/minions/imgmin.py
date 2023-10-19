@@ -23,9 +23,9 @@ class ImgMinion:
     '''Minion get image metadata'''
     def __init__(self):
 
-        self.columns = ['Mode', 'Format', 'Width',
-                        'Height', 'Is animated', 
-                        'Numer frames']        
+        self.columns = ['Img Mode', 'Img Format', 'Img Width',
+                        'Img Height', 'Img Is animated', 
+                        'Img Numer frames']        
         self.ex = ['blp', 'bmp', 'bufr', 'cur', 'dcx', 'dds', 'dib', 'eps', 'ps',
                    'fit', 'fits', 'flc', 'fli', 'fpx', 'ftc', 'ftu', 'gbr', 'gif', 
                    'grib', 'h5', 'hdf', 'icns', 'ico', 'im', 'iim', 'jfif', 'jpe', 
@@ -34,18 +34,18 @@ class ImgMinion:
                    'pgm', 'pnm', 'ppm', 'psd', 'bw', 'rgb', 'rgba', 'sgi', 'ras', 
                    'icb', 'tga', 'vda', 'vst', 'tif', 'tiff', 'webp', 'emf', 'wmf', 
                    'xbm', 'xpm']
-        self._filedata = []
+        self._filedata = ()
 
     def get_meta_inf(self, file):
         '''get metadata'''
         try:
             with Image.open(file) as img:
                 # атрибутов больше, выбраны основные, на которых не ломается метод (потом можно расширить)
-                self._filedata = [img.mode, img.format, img.width, 
+                self._filedata = (img.mode, img.format, img.width,
                                    img.height, img.is_animated,
-                                   img.n_frames]
-                
+                                   img.n_frames)
+
             return dict(zip(self.columns, self._filedata))
-        
+
         except:
             return dict(zip(self.columns, self._filedata*len(self.columns)))

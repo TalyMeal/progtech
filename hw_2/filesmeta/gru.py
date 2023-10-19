@@ -33,6 +33,7 @@ class Gru():
             self._module = importlib.import_module(self._file_name[:-3], package=None)
 
             for self._name in dir(self._module):
+                # непонятно, насколько хорошая идея проверять по имени класса
                 if 'Minion' in self._name:
                     # получаем ЭКЗЕМПЛЯР класса, к методам которого можно обращаться
                     yield getattr(self._module, self._name)()
@@ -53,8 +54,8 @@ class Gru():
         # получаем базовую информацию по файлу
         self._meta_inf.update(self._minions_ex['*'].get_meta_inf(filename))
 
-        # узнаем расширение файла
-        self._ex = filename.split(".")[-1]
+        # узнаем расширение файла - в нижний регистр его на всякий случай
+        self._ex = filename.split(".")[-1].lower()
 
         # если расширение известно - вызываем соответствующего миньона
         if self._ex in self._minions_ex:
