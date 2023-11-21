@@ -6,7 +6,7 @@ from help_functions import check_and_run
 
 def f_count(args_index) -> int:
     """Считает число файлов"""
-    index = pd.read_csv(args_index, usecols=['Name'], engine='pyarrow')
+    index = pd.read_csv(args_index, usecols=['File name'], engine='pyarrow')
 
     return len(index.index)
 

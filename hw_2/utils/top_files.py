@@ -6,8 +6,8 @@ from help_functions import check_and_run
 
 def top_by_size(args_index, top):
     """Get top files"""
-    index = pd.read_csv(args_index, usecols=['Name', 'Size_bytes'], engine='pyarrow')
-    index = index.sort_values(by=['Size_bytes'], ascending=False).head(top).set_index(pd.Index(range(1,top+1)))
+    index = pd.read_csv(args_index, usecols=['File name', 'File size bytes'], engine='pyarrow')
+    index = index.sort_values(by=['File size bytes'], ascending=False).head(top).set_index(pd.Index(range(1,top+1)))
 
     return index
 
