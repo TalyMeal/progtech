@@ -23,12 +23,11 @@ class ImgMinion:
     '''Minion get image metadata'''
     def __init__(self):
 
-        self.columns = ('Img Mode', 'Img Format', 'Img Width',
-                        'Img Height', 'Img Is animated', 
-                        'Img Numer frames', 'Make', 'Model', 
-                        'DateTime', 'XResolution', 'YResolution',
-                        'GPSLatitudeRef', 'GPSLatitude', 'GPSLongitudeRef',
-                        'GPSLongitude')     
+        self.columns = ('Img_Mode', 'Img_Format', 'Img_Width',
+                        'Img_Height', 'Img_Is_animated', 
+                        'Img_Numer_frames', 'Make', 'Model', 
+                        'XResolution', 'YResolution', 'GPSLatitudeRef', 
+                        'GPSLatitude', 'GPSLongitudeRef', 'GPSLongitude')     
         self.ex = ('blp', 'bmp', 'bufr', 'cur', 'dcx', 'dds', 'dib', 'eps', 'ps',
                    'fit', 'fits', 'flc', 'fli', 'fpx', 'ftc', 'ftu', 'gbr', 'gif', 
                    'grib', 'h5', 'hdf', 'icns', 'ico', 'im', 'iim', 'jfif', 'jpe', 
@@ -53,9 +52,10 @@ class ImgMinion:
             try:
                 for key, val in img._getexif().items():
                     if tags.get(key, key) in self.columns[6:]:
-                        self._filedata.append(val)
+                        # some datatype is unsupported
+                        self._filedata.append(str(val))
                 # add geotags
-                self._filedata += [img._getexif()[34853][i] for i in range(1, 5)]
+                self._filedata += [str(img._getexif()[34853][i]) for i in range(1, 5)]
 
             except:
                 self._filedata += len(self.columns[6:]) * ['']

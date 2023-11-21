@@ -3,6 +3,8 @@ __pycache__/
 *.py[cod]
 *$py.class
 for_some_code_tests.ipynb
+collector_csv_version.py
+help_functions_csv_version.py
 
 # C extensions
 *.so

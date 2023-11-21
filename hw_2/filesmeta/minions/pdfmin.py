@@ -1,13 +1,13 @@
-'''Minion get PDF metadata'''
+'''Minion get PDF_metadata'''
 
 import fitz
 
 class PDFMinion():
-    '''Minion get PDF metadata'''
+    '''Minion get PDF_metadata'''
     def __init__(self):
-        self.columns = ['PDF format', 'PDF title', 'PDF author',
-                        'PDF subject', 'PDF keywords', 'PDF creator',
-                        'PDF producer', 'PDF encryption', 'PDF pages']
+        self.columns = ['PDF_format', 'PDF_title', 'PDF_author',
+                        'PDF_subject', 'PDF_keywords', 'PDF_creator',
+                        'PDF_producer', 'PDF_encryption', 'PDF_pages']
         self.ex = ['pdf']
         self._filedata = ()
 

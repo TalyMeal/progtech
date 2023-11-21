@@ -9,9 +9,9 @@ from help_functions import check_and_run
 
 def extensions_count(args_index, top):
     """Get top 10 extensions"""
-    index = pd.read_csv(args_index, usecols=['File name'], engine='pyarrow')
+    index = pd.read_csv(args_index, usecols=['File_name'], engine='pyarrow')
 
-    extensions = index["File name"].str.split(".", n = -1, expand = False).str[-1]
+    extensions = index["File_name"].str.split(".", n = -1, expand = False).str[-1]
 
     extensions = extensions.value_counts()
     extensions = extensions.to_frame().reset_index().head(top).set_index(pd.Index(range(1,top+1)))
@@ -25,7 +25,7 @@ if __name__ == '__main__':
     parser.add_argument('--question',
                         '-q',
                         type=str,
-                        help="Вопрос - генерировать ли файл index.csv")
+                        help="Вопрос - генерировать ли файл index.sqlite")
     parser.add_argument('--path',
                         '-p',
                         type=str,
@@ -34,8 +34,8 @@ if __name__ == '__main__':
     parser.add_argument('--index',
                         '-i',
                         type=str,
-                        default='../data/index.csv',
-                        help="Абсолютный путь для индекса файлов. Пример: /home/{USERNAME}/Documents/index.csv По умолчанию - ../data/index.csv")     
+                        default='../data/index.sqlite',
+                        help="Абсолютный путь для индекса файлов. Пример: /home/{USERNAME}/Documents/index.sqlite По умолчанию - ../data/index.sqlite")     
     parser.add_argument('--top',
                         '-t', 
                         type=int,

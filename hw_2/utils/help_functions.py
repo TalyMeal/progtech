@@ -22,21 +22,20 @@ def prog_exe_time(func, *arguments):
     end = time.time()
     return round(end-start, 2), func_result
 
-
 def check_and_run(args_index, args_question, args_path, func, arguments):
     '''Проверяет существование индекса по пути и запускает утилиту''' 
 
     if not os.path.exists(args_index):
 
-        print('You need to create index file or set index file path')
+        print('You need to create index DB or set index DB path')
         print('\n')
 
         if args_question is None:
-            arguments[0] = args_index = input('Which path do you want to set for index file? (default - ../data/index.csv) ') or '../data/index.csv'
+            arguments[0] = args_index = input('Which path do you want to set for index DB? (default - ../data/index.sqlite) ') or '../data/index.sqlite'
             print('\n')
 
         if not os.path.exists(args_index):
-            print('You need to create index file')
+            print('You need to create index DB')
 
             if args_question is None:
                 args_question = input('Do you want make index file? [y, n] ')
@@ -57,7 +56,7 @@ def check_and_run(args_index, args_question, args_path, func, arguments):
 
         else:
             if datetime.fromtimestamp(getctime(args_index)).date() - date.today() > timedelta(days=2):
-                print('Probably you need to update index file')
+                print('Probably you need to update index DB')
 
             result = prog_exe_time(func, *arguments)
 
@@ -68,7 +67,7 @@ def check_and_run(args_index, args_question, args_path, func, arguments):
     else:
 
         if datetime.fromtimestamp(getctime(args_index)).date() - date.today() > timedelta(days=2):
-            print('Probably you need to update index file')
+            print('Probably you need to update index DB')
 
         result = prog_exe_time(func, *arguments)
 

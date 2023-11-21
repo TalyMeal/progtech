@@ -6,7 +6,7 @@ from os.path import getsize, getmtime, getctime
 class CommonMinion():
     '''Minion get base metadata'''
     def __init__(self):
-        self.columns = ['File name', 'File full path', 'File size bytes', 'File create', 'File modifying']
+        self.columns = ['File_name', 'File_full_path', 'File_size_bytes', 'File_create', 'File_modifying']
         self.ex = ['*']
         self._filedata = ()
 

@@ -3,12 +3,32 @@
 import csv
 import os
 import logging
+import sqlite3
 from os.path import join, islink
+
+
+def _to_db(f):
+    def wrapper(self):
+        con = sqlite3.connect(self.index_path)
+        cur = con.cursor()
+        names = ", ".join(self._headers)
+        for rec in f(self):
+            names = ", ".join(rec.keys())
+            values = list(rec.values())
+            try:
+                cur.execute(f"INSERT INTO index_files ({names}) VALUES ({', '.join('?' * len(rec))})", values)
+            except Exception as e:
+                print(e)
+                print(names)
+                print(values)
+        con.commit()
+        con.close()
+    return wrapper
 
 
 class Collector:
     """Make CSV with some data about all files in directory"""
-    def __init__(self, gru, path_from='/', index_path='../data/index.csv'):
+    def __init__(self, gru, path_from='/', index_path='../data/index.sqlite'):
         self.path_from = path_from
         self.index_path = index_path
         self._gru = gru
@@ -29,13 +49,14 @@ class Collector:
 
         return tuple(filter(lambda x: not islink(x), self._all_files_and_full_paths))
 
-
+    @_to_db
     def _scan_dir_generator(self):
         """Make a generator with paths inside the directory excluding symbolic links"""
 
         self._filenames = self._symlink_filter()
 
         for self._file in self._filenames:
+            
             try:
                 yield self._gru.gru_get_meta_inf(self._file)
                 
@@ -46,12 +67,8 @@ class Collector:
 
     def _write_dir_data(self):
         """Write files data in directory to CSV"""
-        with open(self.index_path, 'a', encoding='utf-8') as self._file:
-            self._writer = csv.DictWriter(self._file, fieldnames=self._headers)
-
-            for self._dirpath, _, self._filenames in os.walk(self.path_from):
-                for self._dict_string in self._scan_dir_generator():
-                    self._writer.writerow(self._dict_string)
+        for self._dirpath, _, self._filenames in os.walk(self.path_from):
+            self._scan_dir_generator()
 
 
     def collect(self):
@@ -60,8 +77,14 @@ class Collector:
         Сreate file if not exist
         """
         if not os.path.exists(self.index_path):
-            with open(self.index_path, 'w', encoding='utf-8') as self._file:
-                self._writer = csv.DictWriter(self._file, fieldnames=self._headers)
-                self._writer.writeheader()
+            con = sqlite3.connect(self.index_path)
+            cur = con.cursor()           
+            cur.execute(f"CREATE TABLE index_files({', '.join(self._headers)})")
+            con.commit()
+            con.close()
+
+        #     with open(self.index_path, 'w', encoding='utf-8') as self._file:
+        #         self._writer = csv.DictWriter(self._file, fieldnames=self._headers)
+        #         self._writer.writeheader()
 
         self._write_dir_data()

@@ -5,11 +5,11 @@ from pptx import Presentation
 class PptxMinion():
     '''Minion get pptx files metadata'''
     def __init__(self):
-        self.columns = ['MS Office Author', 'MS Office Category', 'MS Office Comments',
-                        'MS Office Content status', 'MS Office Identifier', 'MS Office Keywords',
-                        'MS Office Language', 'MS Office Last modified by', 'MS Office Revision',
-                        'MS Office Subject', 'MS Office Title', 'MS Office Version',
-                        'MS Office Slides count']
+        self.columns = ['MS_Office_Author', 'MS_Office_Category', 'MS_Office_Comments',
+                        'MS_Office_Content_status', 'MS_Office_Identifier', 'MS_Office_Keywords',
+                        'MS_Office_Language', 'MS_Office_Last_modified_by', 'MS_Office_Revision',
+                        'MS_Office_Subject', 'MS_Office_Title', 'MS_Office_Version',
+                        'MS_Office_Slides_count']
         self.ex = ['pptx']
         self._metadata = ()
 

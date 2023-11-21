@@ -6,8 +6,8 @@ from help_functions import check_and_run
 
 def top_by_size(args_index, top):
     """Get top files"""
-    index = pd.read_csv(args_index, usecols=['File name', 'File size bytes'], engine='pyarrow')
-    index = index.sort_values(by=['File size bytes'], ascending=False).head(top).set_index(pd.Index(range(1,top+1)))
+    index = pd.read_csv(args_index, usecols=['File_name', 'File_size_bytes'], engine='pyarrow')
+    index = index.sort_values(by=['File_size_bytes'], ascending=False).head(top).set_index(pd.Index(range(1,top+1)))
 
     return index
 
@@ -17,7 +17,7 @@ if __name__ == '__main__':
     parser.add_argument('--question',
                         '-q',
                         type=str,
-                        help="Вопрос - генерировать ли файл index.csv")
+                        help="Вопрос - генерировать ли файл index.sqlite")
     parser.add_argument('--path',
                         '-p',
                         type=str,
@@ -26,8 +26,8 @@ if __name__ == '__main__':
     parser.add_argument('--index',
                         '-i',
                         type=str,
-                        default='../data/index.csv',
-                        help="Абсолютный путь для индекса файлов. Пример: /home/{USERNAME}/Documents/index.csv По умолчанию - ../data/index.csv")     
+                        default='../data/index.sqlite',
+                        help="Абсолютный путь для индекса файлов. Пример: /home/{USERNAME}/Documents/index.sqlite По умолчанию - ../data/index.sqlite")     
     parser.add_argument('--top',
                         '-t', 
                         type=int,
