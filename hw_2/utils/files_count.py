@@ -1,14 +1,18 @@
 """Скрипт считает число файлов, содержащихся в index.sqlite"""
 
 import argparse
-import pandas as pd
 from help_functions import check_and_run
+import sqlite3
 
 def f_count(args_index) -> int:
     """Считает число файлов"""
-    index = pd.read_csv(args_index, usecols=['File_name'], engine='pyarrow')
 
-    return len(index.index)
+    con = sqlite3.connect(args_index)
+    cur = con.cursor()
+    cur.execute("SELECT COUNT(File_full_path) FROM index_files")
+    files_count = cur.fetchone()[0]
+    con.close()
+    return f"{files_count} файлов"
 
 if __name__ == '__main__':
 

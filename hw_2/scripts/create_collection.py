@@ -10,6 +10,13 @@ from pstats import SortKey
 sys.path.insert(0,"..")
 
 from staff.collector import Collector
+from filesmeta.gru import Gru
+
+# создали экземпляр Грю
+gru = Gru()
+
+# подтянули всех миньонов
+gru.get_extensions()
 
 pr = cProfile.Profile()
 pr.enable()
@@ -26,11 +33,11 @@ if __name__ == '__main__':
     parser.add_argument('--index',
                         '-i',
                         type=str,
-                        default='../data/index.csv',
-                        help="Абсолютный путь для индекса файлов. Пример: /home/{USERNAME}/Documents/index.csv По умолчанию - ../data/index.csv")    
+                        default='../data/index.sqlite',
+                        help="Абсолютный путь для индекса файлов. Пример: /home/{USERNAME}/Documents/index.sqlite По умолчанию - ../data/index.sqlite")    
     args = parser.parse_args()
     
-    cl = Collector(args.path, args.index)
+    cl = Collector(gru, args.path, args.index)
 
     cl.collect()
 
