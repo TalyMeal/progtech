@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Главная</title>
+    <link rel="stylesheet" href="static/css/styles.css" />
+  </head>
+  <body>
+    <div class="dropdown">
+      <button>Меню СТАКАНа</button>
+      <div class="dropdown-content">
+        <a href="/ext_stat">Статистика по расширениям</a>
+        <a href="/top_10_by_size">Статистика ТОП-10 по размеру</a>
+      </div>
+    </div>
+
+    <div>
+      <br />
+      <br />
+      <br />
+      <br />
+      <h1>STAKAN Main Page</h1>
+      <p>Дата обновления базы: {{ value1 }}</p>
+      <p>Число файлов в базе: {{ value2 }}</p>
+    </div>
+  </body>
+</html>

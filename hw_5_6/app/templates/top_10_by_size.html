@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Статистика ТОП-10 по размеру</title>
+    <link rel="stylesheet" href="static/css/styles.css" />
+  </head>
+  <body>
+    <div class="dropdown">
+      <button>Меню СТАКАНа</button>
+      <div class="dropdown-content">
+        <a href="/">Главная</a>
+        <a href="/ext_stat">Статистика по расширениям</a>
+      </div>
+    </div>
+
+    <div>
+      <br />
+      <br />
+      <br />
+      <br />
+      <h1>Статистика ТОП-10 по размеру</h1>
+      <table>
+        {% for row in value1 %}
+        <tr>
+          <td>{{ row }}</td>
+        </tr>
+        {% endfor %}
+      </table>
+    </div>
+  </body>
+</html>

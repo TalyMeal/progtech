@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Топ-10 расширений по числу файлов</title>
+    <link rel="stylesheet" href="static/css/styles.css" />
+  </head>
+  <body>
+    <div class="dropdown">
+      <button>Меню СТАКАНа</button>
+      <div class="dropdown-content">
+        <a href="/">Главная</a>
+        <a href="/top_10_by_size">Статистика ТОП-10 по размеру</a>
+      </div>
+    </div>
+    <div>
+      <br />
+      <br />
+      <br />
+      <br />
+      <h1>Топ-10 расширений по числу файлов</h1>
+    </div>
+    <table>
+      {% for row in value1 %}
+      <tr>
+        <td>{{ row }}</td>
+      </tr>
+      {% endfor %}
+    </table>
+  </body>
+</html>
